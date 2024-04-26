@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -62,9 +61,6 @@ public class YourSolver implements Solver<Board> {
         int[][] matrix = CreateGraph.createMatrix(board);
         Vertex[][] graph = CreateGraph.createGraph(matrix, board);
 
-
-
-
         Vertex vertexHead = graph[head.getX()][head.getY()];
         Vertex vertexApple = graph[apple.getX()][apple.getY()];
         Vertex vertexBadApple = graph[badApple.getX()][badApple.getY()];
@@ -82,22 +78,33 @@ public class YourSolver implements Solver<Board> {
 
         System.out.println(board.toString());
 
-        if (Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForBadApple)
-                == null && Board.direction(head, nextPosForTail) == null) {
-            return Direction.RIGHT.toString();
-        }
 
-        if (Board.direction(head, nextPosForApple) == null && board.getSnake().size() > 20
-                && Board.direction(head, nextPosForTail) == null) {
+
+
+
+
+//        if (Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForBadApple)
+//                == null && Board.direction(head, nextPosForTail) == null) {
+//            return board.getSnakeDirection().toString();
+//        }
+//
+//        if (Board.direction(head, nextPosForApple) == null && board.getSnake().size() > 20
+//                && Board.direction(head, nextPosForTail) == null) {
+//            return Board.direction(head, nextPosForBadApple).toString();
+//        }
+//
+//        if (Board.direction(head, nextPosForApple) == null) {
+//            return Board.direction(head, nextPosForTail).toString();
+//        }
+
+
+        if(NextTurn.nextTurn(matrix, shortestPathForApple, board)){
             return Board.direction(head, nextPosForBadApple).toString();
+        }else {
+            return Board.direction(head, nextPosForApple).toString();
         }
 
-        if (Board.direction(head, nextPosForApple) == null) {
-            return Board.direction(head, nextPosForTail).toString();
-        }
 
-
-        return Board.direction(head, nextPosForApple).toString();
     }
 
     public static void main(String[] args) {
