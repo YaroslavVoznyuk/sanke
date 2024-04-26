@@ -32,8 +32,6 @@ public class NextTurn {
         }else {
             return false;
         }
-
-
     }
 
 }

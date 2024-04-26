@@ -78,9 +78,57 @@ public class YourSolver implements Solver<Board> {
 
         System.out.println(board.toString());
 
+        Point right = head;
+        right.change(Direction.RIGHT);
+        Point up = head;
+        up.change(Direction.UP);
+        Point left = head;
+        left.change(Direction.LEFT);
+        Point down = head;
+        down.change(Direction.DOWN);
 
 
+        if (NextTurn.nextTurn(matrix, shortestPathForApple, board) && board.getSnake().size() >= 30
+                && Board.direction(head, nextPosForBadApple) != null) {
+            return Board.direction(head, nextPosForBadApple).toString();
+        }
 
+        if (Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForBadApple)
+                == null && Board.direction(head, nextPosForTail) == null) {
+            Point newHead = head;
+            newHead.change(board.getSnakeDirection());
+            if(!board.getWalls().contains(newHead)){
+               return board.getSnakeDirection().toString();
+            }
+            if(board.getWalls().contains(newHead) && board.getWalls().contains(right)){
+                return Direction.LEFT.toString();
+            }
+            if(board.getWalls().contains(newHead) && board.getWalls().contains(up)){
+                return Direction.DOWN.toString();
+            }
+            if(board.getWalls().contains(newHead) && board.getWalls().contains(left)){
+                return Direction.RIGHT.toString();
+            }
+            if(board.getWalls().contains(newHead) && board.getWalls().contains(down)){
+                return Direction.UP.toString();
+            }
+            if(board.getWalls().contains(newHead) && !board.getWalls().contains(left) && !board.getWalls().contains(right)){
+                return Direction.RIGHT.toString();
+            }
+            if(board.getWalls().contains(newHead) && !board.getWalls().contains(up) && !board.getWalls().contains(down)){
+                return Direction.UP.toString();
+            }
+        }
+
+        if(Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForTail) == null){
+            Board.direction(head, nextPosForBadApple).toString();
+        }
+
+        if (Board.direction(head, nextPosForApple) == null) {
+            return Board.direction(head, nextPosForTail).toString();
+        }
+
+        return Board.direction(head, nextPosForApple).toString();
 
 
 //        if (Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForBadApple)
@@ -96,14 +144,6 @@ public class YourSolver implements Solver<Board> {
 //        if (Board.direction(head, nextPosForApple) == null) {
 //            return Board.direction(head, nextPosForTail).toString();
 //        }
-
-
-        if(NextTurn.nextTurn(matrix, shortestPathForApple, board)){
-            return Board.direction(head, nextPosForBadApple).toString();
-        }else {
-            return Board.direction(head, nextPosForApple).toString();
-        }
-
 
     }
 
