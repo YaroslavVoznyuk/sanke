@@ -30,7 +30,9 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * User: Yaroslav
@@ -78,50 +80,64 @@ public class YourSolver implements Solver<Board> {
 
         System.out.println(board.toString());
 
-        Point right = head;
+        Point right = board.getHead();
         right.change(Direction.RIGHT);
-        Point up = head;
+        Point up = board.getHead();
         up.change(Direction.UP);
-        Point left = head;
+        Point left = board.getHead();
         left.change(Direction.LEFT);
-        Point down = head;
+        Point down = board.getHead();
         down.change(Direction.DOWN);
+
+        List<Point> snakeAndWalls = new ArrayList<>();
+        snakeAndWalls.addAll(board.getSnake());
+        snakeAndWalls.addAll(board.getWalls());
 
 
         if (NextTurn.nextTurn(matrix, shortestPathForApple, board) && board.getSnake().size() >= 30
                 && Board.direction(head, nextPosForBadApple) != null) {
-            return Board.direction(head, nextPosForBadApple).toString();
+           return Board.direction(head, nextPosForBadApple).toString();
         }
 
         if (Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForBadApple)
                 == null && Board.direction(head, nextPosForTail) == null) {
-            Point newHead = head;
-            newHead.change(board.getSnakeDirection());
-            if(!board.getWalls().contains(newHead)){
-               return board.getSnakeDirection().toString();
-            }
-            if(board.getWalls().contains(newHead) && board.getWalls().contains(right)){
-                return Direction.LEFT.toString();
-            }
-            if(board.getWalls().contains(newHead) && board.getWalls().contains(up)){
-                return Direction.DOWN.toString();
-            }
-            if(board.getWalls().contains(newHead) && board.getWalls().contains(left)){
-                return Direction.RIGHT.toString();
-            }
-            if(board.getWalls().contains(newHead) && board.getWalls().contains(down)){
-                return Direction.UP.toString();
-            }
-            if(board.getWalls().contains(newHead) && !board.getWalls().contains(left) && !board.getWalls().contains(right)){
-                return Direction.RIGHT.toString();
-            }
-            if(board.getWalls().contains(newHead) && !board.getWalls().contains(up) && !board.getWalls().contains(down)){
-                return Direction.UP.toString();
+            int end = 0;
+            int choose = 0;
+            while (end == 0) {
+                choose = (int) (Math.random() * 4);
+
+                switch (choose) {
+                    case 0:
+                        if (!snakeAndWalls.contains(right))
+                        {
+                            end = 1;
+                            return Direction.RIGHT.toString();
+                        } break;
+
+                    case 1:
+                        if (!snakeAndWalls.contains(left))
+                        {
+                            end = 1;
+                            return Direction.LEFT.toString();
+                        } break;
+                    case 2:
+                        if (!snakeAndWalls.contains(down))
+                        {
+                            end = 1;
+                            return Direction.DOWN.toString();
+                        } break;
+                    case 3:
+                        if (!snakeAndWalls.contains(up))
+                        {
+                            end = 1;
+                            return Direction.UP.toString();
+                        } break;
+                }
             }
         }
 
-        if(Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForTail) == null){
-            Board.direction(head, nextPosForBadApple).toString();
+        if (Board.direction(head, nextPosForApple) == null && Board.direction(head, nextPosForTail) == null) {
+            return Board.direction(head, nextPosForBadApple).toString();
         }
 
         if (Board.direction(head, nextPosForApple) == null) {
